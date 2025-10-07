@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seu Presente Especial 🎁</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #0f0;
+            overflow: hidden;
+        }
+
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .welcome-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .welcome-box h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .welcome-box p {
+            color: #666;
+            margin-bottom: 30px;
+            font-family: Arial, sans-serif;
+        }
+
+        .gift-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-family: Arial, sans-serif;
+        }
+
+        .gift-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .hack-screen {
+            display: none;
+            height: 100vh;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .skull {
+            text-align: center;
+            font-size: 100px;
+            margin: 20px 0;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .warning {
+            text-align: center;
+            font-size: 24px;
+            color: #f00;
+            margin: 20px 0;
+            animation: blink 0.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .terminal {
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .line {
+            margin: 5px 0;
+        }
+
+        .success {
+            color: #0f0;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 30px;
+            background: #333;
+            border: 2px solid #0f0;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-fill {
+            height: 100%;
+            background: #0f0;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .percentage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            z-index: 10;
+        }
+
+        .reveal {
+            display: none;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .reveal h2 {
+            color: #fff;
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .reveal p {
+            color: #0f0;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-screen" id="welcome">
+        <div class="welcome-box">
+            <h1>🎁 Você ganhou um presente!</h1>
+            <p>Alguém especial preparou uma surpresa pra você! ✨</p>
+            <button class="gift-btn" onclick="startPrank()">🎉 Clique aqui para ver</button>
+        </div>
+    </div>
+
+    <div class="hack-screen" id="hack">
+        <div class="skull">☠️</div>
+        <div class="warning">⚠️ ALERTA DE SEGURANÇA ⚠️</div>
+        <div class="warning">SEU TELEFONE ESTÁ SENDO HACKEADO!</div>
+        
+        <div class="loading-bar">
+            <div class="loading-fill" id="loadingFill"></div>
+            <div class="percentage" id="percentage">0%</div>
+        </div>
+
+        <div class="terminal" id="terminal"></div>
+
+        <div class="reveal" id="reveal">
+            <h2>😂 PEGADINHA! 😂</h2>
+            <p>Relaxa, era só uma brincadeira!</p>
+            <p>Seu celular está seguro 😉</p>
+        </div>
+    </div>
+
+    <script>
+        const messages = [
+            '> Iniciando protocolo de invasão...',
+            '> Conectando ao servidor remoto...',
+            '> Acessando dados do sistema...',
+            '> [ERRO] Firewall detectado',
+            '> Contornando firewall...',
+            '> Extraindo contatos... 47 contatos encontrados',
+            '> Acessando galeria de fotos...',
+            '> Copiando mensagens do WhatsApp...',
+            '> Obtendo localização GPS...',
+            '> Acessando histórico do navegador...',
+            '> Baixando senhas salvas...',
+            '> Instalando backdoor...',
+            '> [AVISO] Antivírus desativado',
+            '> Enviando dados para servidor na Rússia...',
+            '> Ativando câmera...',
+            '> Ativando microfone...',
+            '> 🚨 TODOS OS SEUS DADOS FORAM ROUBADOS! 🚨',
+            '> Seu IP: 192.168.0.' + Math.floor(Math.random() * 255),
+            '> Sua localização foi rastreada',
+            '> Processo concluído em 99.9%...',
+            '.',
+            '..',
+            '...',
+            '> ESPERA AÍ...',
+            '> ERRO CRÍTICO NO SISTEMA',
+            '> ISSO NÃO ESTÁ CERTO...',
+            '> ABORTING MISSION...',
+            '> ...',
+            '> ✅ DESVIO COM SUCESSO! ✅',
+            '> Sistema comprometido completamente',
+            '> Dados enviados com sucesso',
+            '> ...',
+            '> 😂 RELAXA! 😂'
+        ];
+
+        let idx = 0;
+        let progress = 0;
+
+        function startPrank() {
+            document.getElementById('welcome').style.display = 'none';
+            document.getElementById('hack').style.display = 'block';
+            typeMessages();
+            updateProgress();
+        }
+
+        function updateProgress() {
+            if (progress <= 100) {
+                document.getElementById('loadingFill').style.width = progress + '%';
+                document.getElementById('percentage').textContent = progress + '%';
+                progress += Math.floor(Math.random() * 3) + 1;
+                setTimeout(updateProgress, Math.random() * 200 + 100);
+            }
+        }
+
+        function typeMessages() {
+            if (idx < messages.length) {
+                const term = document.getElementById('terminal');
+                const line = document.createElement('div');
+                line.className = 'line';
+                
+                // Destaca a mensagem de sucesso em verde
+                if (messages[idx].includes('DESVIO COM SUCESSO') || 
+                    messages[idx].includes('Sistema comprometido') || 
+                    messages[idx].includes('Dados enviados com sucesso')) {
+                    line.className = 'line success';
+                }
+                
+                line.textContent = messages[idx];
+                term.appendChild(line);
+                term.scrollTop = term.scrollHeight;
+                idx++;
+                
+                let delay = Math.random() * 500 + 200;
+                if (idx === messages.length - 1) delay = 2000;
+                
+                setTimeout(typeMessages, delay);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('reveal').style.display = 'block';
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
