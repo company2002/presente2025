@@ -105,6 +105,12 @@
             margin: 5px 0;
         }
 
+        .success {
+            color: #0f0;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
         .loading-bar {
             width: 100%;
             height: 30px;
@@ -119,13 +125,18 @@
             height: 100%;
             background: #0f0;
             width: 0%;
-            animation: load 3s ease-in-out infinite;
+            transition: width 0.3s;
         }
 
-        @keyframes load {
-            0% { width: 0%; }
-            50% { width: 100%; }
-            100% { width: 0%; }
+        .percentage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            z-index: 10;
         }
 
         .reveal {
@@ -145,14 +156,35 @@
             color: #0f0;
             font-size: 18px;
         }
+
+        .watermark {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 64px;
+            color: rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+            text-align: center;
+            pointer-events: none;
+            z-index: 999;
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .watermark.show {
+            display: block;
+        }
     </style>
 </head>
 <body>
     <div class="welcome-screen" id="welcome">
         <div class="welcome-box">
-            <h1>🎁 Você tem um presente!</h1>
-            <p>Clique no botão abaixo para ver sua surpresa especial</p>
-            <button class="gift-btn" onclick="startPrank()">🎉 Ver Presente</button>
+            <h1>🎁 Você ganhou um presente!</h1>
+            <p>Alguém especial preparou uma surpresa pra você! ✨</p>
+            <button class="gift-btn" onclick="startPrank()">🎉 Clique aqui para ver</button>
         </div>
     </div>
 
@@ -162,10 +194,15 @@
         <div class="warning">SEU TELEFONE ESTÁ SENDO HACKEADO!</div>
         
         <div class="loading-bar">
-            <div class="loading-fill"></div>
+            <div class="loading-fill" id="loadingFill"></div>
+            <div class="percentage" id="percentage">0%</div>
         </div>
 
         <div class="terminal" id="terminal"></div>
+
+        <div class="watermark" id="watermark">
+            Jesus te ama ❤️
+        </div>
 
         <div class="reveal" id="reveal">
             <h2>😂 PEGADINHA! 😂</h2>
@@ -204,15 +241,38 @@
             '> ISSO NÃO ESTÁ CERTO...',
             '> ABORTING MISSION...',
             '> ...',
+            '> ✅ DESVIO COM SUCESSO! ✅',
+            '> Sistema comprometido completamente',
+            '> Dados enviados com sucesso',
+            '> ...',
             '> 😂 RELAXA! 😂'
         ];
 
         let idx = 0;
+        let progress = 0;
 
         function startPrank() {
             document.getElementById('welcome').style.display = 'none';
             document.getElementById('hack').style.display = 'block';
             typeMessages();
+            updateProgress();
+        }
+
+        function updateProgress() {
+            if (progress <= 100) {
+                document.getElementById('loadingFill').style.width = progress + '%';
+                document.getElementById('percentage').textContent = progress + '%';
+                
+                if (progress >= 100) {
+                    // Quando chegar em 100%, mostra a mensagem
+                    setTimeout(() => {
+                        document.getElementById('watermark').classList.add('show');
+                    }, 500);
+                }
+                
+                progress += Math.floor(Math.random() * 3) + 1;
+                setTimeout(updateProgress, Math.random() * 200 + 100);
+            }
         }
 
         function typeMessages() {
@@ -220,6 +280,14 @@
                 const term = document.getElementById('terminal');
                 const line = document.createElement('div');
                 line.className = 'line';
+                
+                // Destaca a mensagem de sucesso em verde
+                if (messages[idx].includes('DESVIO COM SUCESSO') || 
+                    messages[idx].includes('Sistema comprometido') || 
+                    messages[idx].includes('Dados enviados com sucesso')) {
+                    line.className = 'line success';
+                }
+                
                 line.textContent = messages[idx];
                 term.appendChild(line);
                 term.scrollTop = term.scrollHeight;
@@ -232,7 +300,7 @@
             } else {
                 setTimeout(() => {
                     document.getElementById('reveal').style.display = 'block';
-                }, 1000);
+                }, 2000);
             }
         }
     </script>
